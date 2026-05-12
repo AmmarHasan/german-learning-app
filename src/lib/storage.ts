@@ -80,6 +80,9 @@ export function updateWordProgress(wordId: string, action: "correct" | "incorrec
   return prog;
 }
 
+export function resetAllProgress() {
+  localStorage.removeItem(STORAGE_KEY);
+}
 export function setWordStatus(wordId: string, status: WordStatus) {
   const allProgress = getProgress();
   const prog = allProgress[wordId] || {

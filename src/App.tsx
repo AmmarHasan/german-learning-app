@@ -1,13 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Chapter, chapters } from './data/chapters';
 import { ChapterList } from './components/ChapterList';
 import { Deck } from './components/Deck';
 import { Dictionary } from './components/Dictionary';
-import { BookOpen, Search } from 'lucide-react';
+import { Settings } from './components/Settings';
+import { BookOpen, Search, Settings as SettingsIcon } from 'lucide-react';
 
 export default function App() {
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
-  const [activeTab, setActiveTab] = useState<"chapters" | "dictionary">("chapters");
+  const [activeTab, setActiveTab] = useState<"chapters" | "dictionary" | "settings">("chapters");
+
+  useEffect(() => {
+    // Initial theme check
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else if (savedTheme === "light") {
+      document.documentElement.classList.remove("dark");
+    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
 
   if (selectedChapter) {
     return (
@@ -28,8 +41,10 @@ export default function App() {
             chapters={chapters} 
             onSelect={setSelectedChapter} 
           />
-        ) : (
+        ) : activeTab === "dictionary" ? (
           <Dictionary />
+        ) : (
+          <Settings />
         )}
       </div>
 
@@ -48,6 +63,13 @@ export default function App() {
           >
             <Search size={20} />
             Dictionary
+          </button>
+          <button 
+            onClick={() => setActiveTab("settings")}
+            className={`flex-1 py-3.5 flex flex-col items-center gap-1.5 text-xs font-semibold transition-colors ${activeTab === "settings" ? "text-blue-600 dark:text-blue-400" : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"}`}
+          >
+            <SettingsIcon size={20} />
+            Settings
           </button>
         </div>
       </div>
