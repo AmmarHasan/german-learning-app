@@ -4,11 +4,13 @@ import { ChapterList } from './components/ChapterList';
 import { Deck } from './components/Deck';
 import { Dictionary } from './components/Dictionary';
 import { Settings } from './components/Settings';
-import { BookOpen, Search, Settings as SettingsIcon } from 'lucide-react';
+import { Tutorial } from './components/Tutorial';
+import { BookOpen, Search, Settings as SettingsIcon, PlayCircle } from 'lucide-react';
 
 export default function App() {
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
   const [activeTab, setActiveTab] = useState<"chapters" | "dictionary" | "settings">("chapters");
+  const [showTutorial, setShowTutorial] = useState(false);
 
   useEffect(() => {
     // Initial theme check
@@ -21,6 +23,10 @@ export default function App() {
       document.documentElement.classList.add("dark");
     }
   }, []);
+
+  if (showTutorial) {
+    return <Tutorial onBack={() => setShowTutorial(false)} />;
+  }
 
   if (selectedChapter) {
     return (
@@ -35,16 +41,30 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 font-sans selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-blue-900 dark:selection:text-blue-100 relative">
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto relative">
+        {activeTab === "chapters" && (
+            <div className="absolute top-4 right-4 z-10 hidden sm:block">
+               <button onClick={() => setShowTutorial(true)} className="flex items-center gap-2 bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 px-4 py-2 rounded-xl text-sm font-semibold transition-colors">
+                  <PlayCircle size={18} /> Watch Tutorial
+               </button>
+            </div>
+        )}
         {activeTab === "chapters" ? (
-          <ChapterList 
-            chapters={chapters} 
-            onSelect={setSelectedChapter} 
-          />
+          <>
+            <div className="sm:hidden flex justify-center p-4">
+              <button onClick={() => setShowTutorial(true)} className="w-full flex items-center justify-center gap-2 bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 px-4 py-3 rounded-xl text-sm font-semibold transition-colors">
+                  <PlayCircle size={18} /> Watch Tutorial
+               </button>
+            </div>
+            <ChapterList 
+              chapters={chapters} 
+              onSelect={setSelectedChapter} 
+            />
+          </>
         ) : activeTab === "dictionary" ? (
           <Dictionary />
         ) : (
-          <Settings />
+          <Settings onShowTutorial={() => setShowTutorial(true)} />
         )}
       </div>
 

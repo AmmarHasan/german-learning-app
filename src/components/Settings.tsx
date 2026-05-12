@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { resetAllProgress } from "../lib/storage";
-import { Sun, Moon, RotateCcw, ShieldAlert } from "lucide-react";
+import { Sun, Moon, RotateCcw, ShieldAlert, PlayCircle } from "lucide-react";
 
-export function Settings() {
+export function Settings({ onShowTutorial }: { onShowTutorial?: () => void }) {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     if (typeof window !== "undefined") {
       return document.documentElement.classList.contains("dark") ? "dark" : "light";
@@ -54,6 +54,23 @@ export function Settings() {
               className="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
             >
               {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
+            </button>
+          </div>
+        </section>
+
+        {/* Tutorial Section */}
+        <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Help & Tutorial</h2>
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col">
+              <span className="text-lg font-medium text-slate-900 dark:text-white">Watch Tutorial</span>
+              <span className="text-sm text-slate-500">Learn how to use flashcards</span>
+            </div>
+            <button
+              onClick={onShowTutorial}
+              className="flex items-center gap-2 p-3 bg-blue-50 hover:bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 dark:hover:bg-blue-900/30 rounded-xl transition-colors font-medium"
+            >
+              <PlayCircle size={24} />
             </button>
           </div>
         </section>

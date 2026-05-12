@@ -53,7 +53,7 @@ export function updateWordProgress(wordId: string, action: "correct" | "incorrec
   if (action === "correct") {
     prog.mastery_score = Math.min(100, prog.mastery_score + 20);
   } else if (action === "incorrect") {
-    prog.mastery_score = Math.max(0, prog.mastery_score - 30);
+    prog.mastery_score = Math.max(0, prog.mastery_score - 20);
   } else if (action === "skip") {
     prog.mastery_score = 100;
   }

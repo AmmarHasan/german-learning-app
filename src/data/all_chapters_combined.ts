@@ -371,7 +371,7 @@ const words3: CompactWord[] = [
   ["also", "so", "o", "", "Kein Bus, also schnell!", "No bus, so, quickly!"],
   ["Bild", "picture", "n", "das", "", ""],
   ["Fahrkarte", "ticket", "n", "die", "", ""],
-  ["Glück", "luck", "n", "das", "", "So ein Glück!", "Such luck!"],
+  ["Glück", "luck", "n", "das", "So ein Glück!", "Such luck!"],
   ["heute", "today", "o", "", "", ""],
   ["jetzt", "now", "o", "", "", ""],
   ["schnell", "quick", "a", "", "", ""],

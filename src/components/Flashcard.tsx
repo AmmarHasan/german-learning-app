@@ -6,9 +6,10 @@ import { RotateCw, Check, X, GraduationCap, EyeOff } from "lucide-react";
 import { getWordProgress, WordProgress } from "../lib/storage";
 
 type FlashcardProps = {
+  key?: React.Key;
   word: Word;
   active: boolean;
-  onSwipe: (dir: "left" | "right" | "up") => void;
+  onSwipe: (direction: "left" | "right" | "up") => void;
   index: number;
 };
 

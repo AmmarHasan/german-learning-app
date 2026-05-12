@@ -4,6 +4,13 @@ import { Flashcard } from "./Flashcard";
 import { ArrowLeft, Check, RotateCcw, X, Target } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { getProgress, updateWordProgress } from "../lib/storage";
+import { cn } from "../lib/utils";
+
+interface ScorePopup {
+  id: number;
+  value: string;
+  type: "positive" | "negative";
+}
 
 type DeckProps = {
   chapter: Chapter;
@@ -17,10 +24,20 @@ export function Deck({ chapter, onBack }: DeckProps) {
   const [finished, setFinished] = useState(false);
   const [totalToLearn, setTotalToLearn] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [scorePopups, setScorePopups] = useState<ScorePopup[]>([]);
 
   useEffect(() => {
     loadDeck();
   }, [chapter]);
+
+  const addScorePopup = (type: "positive" | "negative") => {
+    const id = Date.now();
+    const value = type === "positive" ? "+20" : "-20";
+    setScorePopups(prev => [...prev, { id, value, type }]);
+    setTimeout(() => {
+      setScorePopups(prev => prev.filter(p => p.id !== id));
+    }, 1000);
+  };
 
   const loadDeck = () => {
     const progress = getProgress();
@@ -43,7 +60,14 @@ export function Deck({ chapter, onBack }: DeckProps) {
     
     const currentWord = remainingWords[0];
     let action: "correct" | "incorrect" | "skip" = "correct";
-    if (direction === "left") action = "incorrect";
+    if (direction === "left") {
+      action = "incorrect";
+      addScorePopup("negative");
+    }
+    if (direction === "right") {
+      action = "correct";
+      addScorePopup("positive");
+    }
     if (direction === "up") action = "skip";
     
     // Update data persistence
@@ -101,6 +125,28 @@ export function Deck({ chapter, onBack }: DeckProps) {
       )}
 
       <div className="relative w-full max-w-sm h-[400px] sm:h-[480px] perspective-[1000px] flex justify-center mt-4">
+        {/* Score Popups */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-50">
+          <AnimatePresence>
+            {scorePopups.map((popup) => (
+              <motion.div
+                key={popup.id}
+                initial={{ opacity: 0, scale: 0.5, y: 0 }}
+                animate={{ opacity: 1, scale: 1.2, y: -100 }}
+                exit={{ opacity: 0, scale: 0.8, y: -150 }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className={cn(
+                  "absolute text-4xl font-black italic tracking-tighter drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]",
+                  popup.type === "positive" ? "text-emerald-500" : "text-rose-500"
+                )}
+                style={{ textShadow: "2px 2px 0px white" }}
+              >
+                {popup.value}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
         {finished ? (
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
