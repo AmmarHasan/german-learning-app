@@ -5,10 +5,20 @@ import { Sun, Moon, RotateCcw, ShieldAlert, PlayCircle } from "lucide-react";
 export function Settings({ onShowTutorial }: { onShowTutorial?: () => void }) {
   const [theme, setTheme] = useState<"light" | "dark">(() => {
     if (typeof window !== "undefined") {
-      return document.documentElement.classList.contains("dark") ? "dark" : "light";
+      return document.documentElement.classList.contains("dark")
+        ? "dark"
+        : "light";
     }
     return "light";
   });
+
+  const [studyDirection, setStudyDirection] = useState<"de-en" | "en-de">(
+    () => {
+      return (
+        (localStorage.getItem("studyDirection") as "de-en" | "en-de") || "de-en"
+      );
+    },
+  );
 
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
@@ -43,11 +53,17 @@ export function Settings({ onShowTutorial }: { onShowTutorial?: () => void }) {
       <div className="space-y-6">
         {/* Appearance Section */}
         <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Appearance</h2>
+          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
+            Appearance
+          </h2>
           <div className="flex items-center justify-between">
             <div className="flex flex-col">
-              <span className="text-lg font-medium text-slate-900 dark:text-white">Dark Mode</span>
-              <span className="text-sm text-slate-500">Toggle dark and light themes</span>
+              <span className="text-lg font-medium text-slate-900 dark:text-white">
+                Dark Mode
+              </span>
+              <span className="text-sm text-slate-500">
+                Toggle dark and light themes
+              </span>
             </div>
             <button
               onClick={toggleTheme}
@@ -58,13 +74,58 @@ export function Settings({ onShowTutorial }: { onShowTutorial?: () => void }) {
           </div>
         </section>
 
+        {/* Study Preferences Section */}
+        <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
+            Study Preferences
+          </h2>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex flex-col">
+                <span className="text-lg font-medium text-slate-900 dark:text-white">
+                  Study Direction
+                </span>
+                <span className="text-sm text-slate-500">
+                  Choose which language to guess from
+                </span>
+              </div>
+              <div className="flex items-center bg-slate-100 dark:bg-slate-800 rounded-xl p-1 shrink-0">
+                <button
+                  onClick={() => {
+                    setStudyDirection("de-en");
+                    localStorage.setItem("studyDirection", "de-en");
+                  }}
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${studyDirection === "de-en" ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"}`}
+                >
+                  DE → EN
+                </button>
+                <button
+                  onClick={() => {
+                    setStudyDirection("en-de");
+                    localStorage.setItem("studyDirection", "en-de");
+                  }}
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${studyDirection === "en-de" ? "bg-white dark:bg-slate-700 text-blue-600 dark:text-blue-400 shadow-sm" : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300"}`}
+                >
+                  EN → DE
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Tutorial Section */}
         <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Help & Tutorial</h2>
+          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
+            Help & Tutorial
+          </h2>
           <div className="flex items-center justify-between">
             <div className="flex flex-col">
-              <span className="text-lg font-medium text-slate-900 dark:text-white">Watch Tutorial</span>
-              <span className="text-sm text-slate-500">Learn how to use flashcards</span>
+              <span className="text-lg font-medium text-slate-900 dark:text-white">
+                Watch Tutorial
+              </span>
+              <span className="text-sm text-slate-500">
+                Learn how to use flashcards
+              </span>
             </div>
             <button
               onClick={onShowTutorial}
@@ -77,12 +138,18 @@ export function Settings({ onShowTutorial }: { onShowTutorial?: () => void }) {
 
         {/* Data Section */}
         <section className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Data Management</h2>
+          <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
+            Data Management
+          </h2>
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="text-lg font-medium text-slate-900 dark:text-white">Reset Progress</span>
-                <span className="text-sm text-slate-500">This will clear all your learning data</span>
+                <span className="text-lg font-medium text-slate-900 dark:text-white">
+                  Reset Progress
+                </span>
+                <span className="text-sm text-slate-500">
+                  This will clear all your learning data
+                </span>
               </div>
               {!showConfirmReset ? (
                 <button
@@ -112,9 +179,13 @@ export function Settings({ onShowTutorial }: { onShowTutorial?: () => void }) {
 
             {showConfirmReset && (
               <div className="mt-2 p-3 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl flex items-start gap-3">
-                <ShieldAlert className="text-amber-600 dark:text-amber-400 shrink-0" size={20} />
+                <ShieldAlert
+                  className="text-amber-600 dark:text-amber-400 shrink-0"
+                  size={20}
+                />
                 <p className="text-sm text-amber-800 dark:text-amber-200">
-                  Are you sure? This action cannot be undone. All mastered words and progress scores will be removed.
+                  Are you sure? This action cannot be undone. All mastered words
+                  and progress scores will be removed.
                 </p>
               </div>
             )}
