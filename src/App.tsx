@@ -1,15 +1,23 @@
-import { useState, useEffect } from 'react';
-import { Chapter, chapters } from './data/chapters';
-import { ChapterList } from './components/ChapterList';
-import { Deck } from './components/Deck';
-import { Dictionary } from './components/Dictionary';
-import { Settings } from './components/Settings';
-import { Tutorial } from './components/Tutorial';
-import { BookOpen, Search, Settings as SettingsIcon, PlayCircle } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { Chapter, chapters } from "./data/chapters";
+import { a2Chapters } from "./data/a2_chapters";
+import { ChapterList } from "./components/ChapterList";
+import { Deck } from "./components/Deck";
+import { Dictionary } from "./components/Dictionary";
+import { Settings } from "./components/Settings";
+import { Tutorial } from "./components/Tutorial";
+import {
+  BookOpen,
+  Search,
+  Settings as SettingsIcon,
+  PlayCircle,
+} from "lucide-react";
 
 export default function App() {
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
-  const [activeTab, setActiveTab] = useState<"chapters" | "dictionary" | "settings">("chapters");
+  const [activeTab, setActiveTab] = useState<
+    "chapters" | "dictionary" | "settings"
+  >("chapters");
   const [showTutorial, setShowTutorial] = useState(false);
 
   useEffect(() => {
@@ -31,9 +39,9 @@ export default function App() {
   if (selectedChapter) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-slate-950 font-sans selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-blue-900 dark:selection:text-blue-100">
-        <Deck 
-          chapter={selectedChapter} 
-          onBack={() => setSelectedChapter(null)} 
+        <Deck
+          chapter={selectedChapter}
+          onBack={() => setSelectedChapter(null)}
         />
       </div>
     );
@@ -43,22 +51,29 @@ export default function App() {
     <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 font-sans selection:bg-blue-100 selection:text-blue-900 dark:selection:bg-blue-900 dark:selection:text-blue-100 relative">
       <div className="flex-1 overflow-auto relative">
         {activeTab === "chapters" && (
-            <div className="absolute top-4 right-4 z-10 hidden sm:block">
-               <button onClick={() => setShowTutorial(true)} className="flex items-center gap-2 bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 px-4 py-2 rounded-xl text-sm font-semibold transition-colors">
-                  <PlayCircle size={18} /> Watch Tutorial
-               </button>
-            </div>
+          <div className="absolute top-4 right-4 z-10 hidden sm:block">
+            <button
+              onClick={() => setShowTutorial(true)}
+              className="flex items-center gap-2 bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 px-4 py-2 rounded-xl text-sm font-semibold transition-colors"
+            >
+              <PlayCircle size={18} /> Watch Tutorial
+            </button>
+          </div>
         )}
         {activeTab === "chapters" ? (
           <>
             <div className="sm:hidden flex justify-center p-4">
-              <button onClick={() => setShowTutorial(true)} className="w-full flex items-center justify-center gap-2 bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 px-4 py-3 rounded-xl text-sm font-semibold transition-colors">
-                  <PlayCircle size={18} /> Watch Tutorial
-               </button>
+              <button
+                onClick={() => setShowTutorial(true)}
+                className="w-full flex items-center justify-center gap-2 bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:hover:bg-blue-900/50 px-4 py-3 rounded-xl text-sm font-semibold transition-colors"
+              >
+                <PlayCircle size={18} /> Watch Tutorial
+              </button>
             </div>
-            <ChapterList 
-              chapters={chapters} 
-              onSelect={setSelectedChapter} 
+            <ChapterList
+              chapters={chapters}
+              a2Chapters={a2Chapters}
+              onSelect={setSelectedChapter}
             />
           </>
         ) : activeTab === "dictionary" ? (
@@ -70,21 +85,21 @@ export default function App() {
 
       <div className="sticky bottom-0 left-0 w-full bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 z-50">
         <div className="max-w-md mx-auto flex">
-          <button 
+          <button
             onClick={() => setActiveTab("chapters")}
             className={`flex-1 py-3.5 flex flex-col items-center gap-1.5 text-xs font-semibold transition-colors ${activeTab === "chapters" ? "text-blue-600 dark:text-blue-400" : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"}`}
           >
             <BookOpen size={20} />
             Chapters
           </button>
-          <button 
+          <button
             onClick={() => setActiveTab("dictionary")}
             className={`flex-1 py-3.5 flex flex-col items-center gap-1.5 text-xs font-semibold transition-colors ${activeTab === "dictionary" ? "text-blue-600 dark:text-blue-400" : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"}`}
           >
             <Search size={20} />
             Dictionary
           </button>
-          <button 
+          <button
             onClick={() => setActiveTab("settings")}
             className={`flex-1 py-3.5 flex flex-col items-center gap-1.5 text-xs font-semibold transition-colors ${activeTab === "settings" ? "text-blue-600 dark:text-blue-400" : "text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300"}`}
           >
