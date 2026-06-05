@@ -18,7 +18,14 @@ export function ChapterList({
   const [progressData, setProgressData] = useState<
     Record<string, WordProgress>
   >({});
-  const [level, setLevel] = useState<"A1" | "A2">("A1");
+  const [level, setLevelState] = useState<"A1" | "A2">(() => {
+    return (localStorage.getItem("studyLevel") as "A1" | "A2") || "A1";
+  });
+
+  const setLevel = (newLevel: "A1" | "A2") => {
+    setLevelState(newLevel);
+    localStorage.setItem("studyLevel", newLevel);
+  };
 
   useEffect(() => {
     setProgressData(getProgress());
